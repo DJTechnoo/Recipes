@@ -24,4 +24,12 @@
         android:id="@+id/additem_but"
         android:text="ADD ITEM"/>
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/shoplist"
+        android:layout_below="@id/additem_but"
+        >
+    </ListView>
+
 </RelativeLayout>
