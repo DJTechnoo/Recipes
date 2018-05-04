@@ -16,7 +16,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/additem_et"
         android:layout_below="@id/fromshop"
-        android:hint="add item"/>
+        android:textColor="#42f4eb"
+        android:hint="add item"
+        android:textColorHint="#42f4eb"
+        />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

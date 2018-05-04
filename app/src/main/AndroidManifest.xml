@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".FridgeActivity" />
-        <activity android:name=".ShopActivity"></activity>
+        <activity android:name=".ShopActivity" />
+        <activity android:name=".RecipeActivity"></activity>
     </application>
 
 </manifest>

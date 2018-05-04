@@ -6,17 +6,28 @@
     android:layout_height="match_parent"
     tools:context="com.example.askel.recipes.MainActivity">
 
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/fridgebut"
+        android:layout_centerInParent="true"
         android:text="TO FRIDGE"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/fridgebut"
+        android:layout_centerInParent="true"
         android:id="@+id/shopbut"
         android:text="TO SHOPPING LIST"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shopbut"
+        android:layout_centerInParent="true"
+        android:id="@+id/recipebut"
+        android:text="TO RECIPES"/>
+
 
 </RelativeLayout>

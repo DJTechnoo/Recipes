@@ -3,9 +3,12 @@ package com.example.askel.recipes;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class FridgeActivity extends AppCompatActivity implements View.OnClickListener {
+public class FridgeActivity extends Activity implements View.OnClickListener {
 
     private Button back, addBut;
     private EditText addEt;
@@ -33,8 +36,11 @@ public class FridgeActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fridge);
+        getWindow().getDecorView().setBackgroundColor(Color.BLACK);
 
         addEt = findViewById(R.id.addfood_et);
         listView = findViewById(R.id.foodlist);
@@ -46,8 +52,10 @@ public class FridgeActivity extends AppCompatActivity implements View.OnClickLis
         db = FirebaseDatabase.getInstance().getReference();
 
         foodList = new ArrayList<>();
-        arrAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, foodList);
+        arrAdapter = new ArrayAdapter<String>(this, R.layout.item_color, R.id.list_content, foodList);
         listView.setAdapter(arrAdapter);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         db.child("FRIDGE").addChildEventListener(new OnFoodListener());
     }

@@ -10,11 +10,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -23,73 +23,50 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
-public class ShopActivity extends Activity implements View.OnClickListener {
+public class RecipeActivity extends Activity implements View.OnClickListener {
 
-    private Button back, addBut;
-    private EditText addEt;
-    private ListView shopListView;
-    private ArrayAdapter<String> arrAdapter;
-    private ArrayList<String> shopList;
+    private EditText et;
+    private Button but_add, back;
     private DatabaseReference db;
+    private ArrayList<String> recipeList;
+    private ArrayAdapter<String> arrAdapter;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_shop);
+        setContentView(R.layout.activity_recipe);
         getWindow().getDecorView().setBackgroundColor(Color.BLACK);
 
 
-        shopListView = findViewById(R.id.shoplist);
-        shopList = new ArrayList<>();
-        addEt = findViewById(R.id.additem_et);
-        addBut = findViewById(R.id.additem_but);
-        addBut.setOnClickListener(this);
-        back = findViewById(R.id.fromshop);
+        db = FirebaseDatabase.getInstance().getReference();
+        et = findViewById(R.id.recipekey_et);
+        but_add = findViewById(R.id.recipekey_but);
+        back = findViewById(R.id.fromrecipe_but);
+        listView = findViewById(R.id.recipe_lv);
+
+        recipeList = new ArrayList<>();
+        arrAdapter = new ArrayAdapter<String>(this, R.layout.item_color, R.id.list_content, recipeList);
+        listView.setAdapter(arrAdapter);
+
+        but_add.setOnClickListener(this);
         back.setOnClickListener(this);
 
-        arrAdapter = new ArrayAdapter<String>(this, R.layout.item_color, R.id.list_content, shopList);
-        shopListView.setAdapter(arrAdapter);
-        shopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                /* TO DO */
-            }
-        });
-        db = FirebaseDatabase.getInstance().getReference();
+        db.child("RECIPES").addChildEventListener(new OnRecipeListener());
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
-        db.child("SHOP").addChildEventListener(new OnShopListener());
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.fromshop:
-                Intent intent=new Intent();
-                setResult(1002,intent);
-                finish();//finishing activity
-                break;
-            case R.id.additem_but:
-                addFood();
-                break;
-        }
-    }
-
-
-    private class OnShopListener implements ChildEventListener {
+    private class OnRecipeListener implements ChildEventListener {
 
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            String retrievedItem = dataSnapshot.getValue(String.class);
-            shopList.add(retrievedItem);
-            Collections.sort(shopList, String.CASE_INSENSITIVE_ORDER);
+            String key = dataSnapshot.getKey();
+            recipeList.add(key);
             arrAdapter.notifyDataSetChanged();
-            shopListView.setSelection(arrAdapter.getCount() - 1);
+            listView.setSelection(arrAdapter.getCount()-1);
         }
 
         @Override
@@ -113,12 +90,26 @@ public class ShopActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public void addFood()
-    {
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()){
+            case R.id.recipekey_but:
+                addRecipe(); break;
 
-        String food = addEt.getText().toString();
-        db.child("SHOP").push().setValue(food);
-        addEt.setText("");
+            case R.id.fromrecipe_but: {
+                Intent intent = new Intent();
+                setResult(1003, intent);
+                finish();//finishing activity
+            } break;
+        }
+    }
+
+    public void addRecipe()
+    {
+        String recipeKey = et.getText().toString();
+        if(!recipeKey.equals(""))
+        db.child("RECIPES").child(recipeKey).setValue(true);
+        et.setText("");
         hideKeyboard(this);
     }
 

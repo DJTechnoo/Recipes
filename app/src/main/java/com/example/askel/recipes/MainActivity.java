@@ -3,24 +3,32 @@ package com.example.askel.recipes;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener {
 
-    private Button fridgeBut, shopBut;
+    private Button fridgeBut, shopBut, recipeBut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        getWindow().getDecorView().setBackgroundColor(Color.BLACK);
 
         fridgeBut = findViewById(R.id.fridgebut);
         shopBut = findViewById(R.id.shopbut);
+        recipeBut = findViewById(R.id.recipebut);
         fridgeBut.setOnClickListener(this);
         shopBut.setOnClickListener(this);
+        recipeBut.setOnClickListener(this);
     }
 
     @Override
@@ -36,6 +44,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivityForResult(intent, 1002);
             }
                 break;
+            case R.id.recipebut: {
+                Intent intent = new Intent(this, RecipeActivity.class);
+                startActivityForResult(intent, 1003);
+            }
+                break;
         }
 
     }
@@ -47,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch(resultCode){
             case 1001: break;
             case 1002: break;
+            case 1003: break;
         }
 
 
