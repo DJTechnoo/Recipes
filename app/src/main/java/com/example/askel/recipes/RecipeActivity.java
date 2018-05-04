@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +34,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
     private ArrayList<String> recipeList;
     private ArrayAdapter<String> arrAdapter;
     private ListView listView;
+    private ArrayList<Recipe> objList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +50,30 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
         but_add = findViewById(R.id.recipekey_but);
         back = findViewById(R.id.fromrecipe_but);
         listView = findViewById(R.id.recipe_lv);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
 
         recipeList = new ArrayList<>();
+        objList = new ArrayList<>();
         arrAdapter = new ArrayAdapter<String>(this, R.layout.item_color, R.id.list_content, recipeList);
         listView.setAdapter(arrAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent;
+                String key;
+                intent = new Intent(getApplicationContext(), RecipeItemsActivity.class);
+                key = recipeList.get(i);
+                intent.putExtra("KEY", key);
+                startActivity(intent);
+            }
+        });
 
         but_add.setOnClickListener(this);
         back.setOnClickListener(this);
 
         db.child("RECIPES").addChildEventListener(new OnRecipeListener());
+        Log.v("TAG COUNT", "count= " + objList.size());
 
     }
 
@@ -67,6 +85,17 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
             recipeList.add(key);
             arrAdapter.notifyDataSetChanged();
             listView.setSelection(arrAdapter.getCount()-1);
+
+            // Loop through each "RECIPE" Obj to add it to the obj-list
+            Log.v("TAG1", dataSnapshot.getKey().toString());
+            Recipe tmp = new Recipe(key);
+            for(DataSnapshot ds2 : dataSnapshot.getChildren()){
+                Log.v("Tag2", ds2.getValue().toString());
+                tmp.appendList(ds2.getValue().toString());
+            }
+
+            objList.add(tmp);
+
         }
 
         @Override
