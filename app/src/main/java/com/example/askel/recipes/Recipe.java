@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Recipe {
     public String key;
     public int priority;
-    private ArrayList<String> itemList;
+    public ArrayList<String> itemList;
 
     public Recipe(String key){
         this.key = key;

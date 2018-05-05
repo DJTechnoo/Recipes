@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class RecipeActivity extends Activity implements View.OnClickListener {
 
@@ -35,6 +37,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
     private ArrayAdapter<String> arrAdapter;
     private ListView listView;
     private ArrayList<Recipe> objList;
+    private ArrayList<String> ownedItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
         listView = findViewById(R.id.recipe_lv);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-
+        ownedItems = new ArrayList<>();
         recipeList = new ArrayList<>();
         objList = new ArrayList<>();
         arrAdapter = new ArrayAdapter<String>(this, R.layout.item_color, R.id.list_content, recipeList);
@@ -71,10 +74,39 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
 
         but_add.setOnClickListener(this);
         back.setOnClickListener(this);
-
+        db.child("FRIDGE").addChildEventListener(new OnFridgeListener());
         db.child("RECIPES").addChildEventListener(new OnRecipeListener());
         Log.v("TAG COUNT", "count= " + objList.size());
 
+    }
+
+    private class OnFridgeListener implements ChildEventListener{
+
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            String fridgeItem = dataSnapshot.getValue(String.class);
+            ownedItems.add(fridgeItem);
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
     }
 
     private class OnRecipeListener implements ChildEventListener {
@@ -82,9 +114,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             String key = dataSnapshot.getKey();
-            recipeList.add(key);
-            arrAdapter.notifyDataSetChanged();
-            listView.setSelection(arrAdapter.getCount()-1);
+            //recipeList.add(key);
+
 
             // Loop through each "RECIPE" Obj to add it to the obj-list
             Log.v("TAG1", dataSnapshot.getKey().toString());
@@ -94,7 +125,38 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
                 tmp.appendList(ds2.getValue().toString());
             }
 
+            recipeList.clear();
             objList.add(tmp);
+
+            /* ALGORITHM COMES HERE FOR SORTING BY OWNED ITEMS!
+             1) update "priority"
+             2) sort by "priority"
+             3) place the keys back into listview in that order
+            * */
+            // 1)
+            for(Recipe r : objList){
+                for(String t : r.itemList){
+                    for(String t2 : ownedItems) {
+                        if (t.equals(t2)) r.priority++;
+                    }
+                }
+            }
+
+            // 2)
+            Collections.sort(objList, new Comparator<Recipe>() {
+                @Override
+                public int compare(Recipe recipe, Recipe t1) {
+                    return (Integer.valueOf(t1.priority).compareTo(recipe.priority));
+                }
+            });
+
+            // 3)
+            for(Recipe r : objList) {
+
+                recipeList.add(r.key);
+            }
+            arrAdapter.notifyDataSetChanged();
+            listView.setSelection(arrAdapter.getCount()-1);
 
         }
 
