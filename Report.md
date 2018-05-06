@@ -11,7 +11,7 @@ with activities, and implement the navigation to these.
 Then the core logic was implemented, with some final adjustments
 upon finishing the project, such as deletion functionality.
 
-## Challenging, anad What I learned
+## Challenging, and What I've learned
 
 THe most challenging part was to pasre the data into
 objects, and implement the algorithm for sorting the 
@@ -25,8 +25,8 @@ while the app is running.
 ## Features
 
 The core features were to create recipes,
-add items you own to the fridge, 
-have recipes sort based on items you posess,
+add items if your posession to the fridge, 
+have recipe-list sorted on them,
 and be able to add items (from the recipes) directly
 to your fridge list.
 
