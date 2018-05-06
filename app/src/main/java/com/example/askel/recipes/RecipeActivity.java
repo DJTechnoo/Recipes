@@ -98,7 +98,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
 
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            String fridgeItem = dataSnapshot.getValue(String.class);
+            String fridgeItem = dataSnapshot.getKey().toString();
             ownedItems.add(fridgeItem);
         }
 

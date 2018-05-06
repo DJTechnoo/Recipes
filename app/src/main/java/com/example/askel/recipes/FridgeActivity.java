@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +59,15 @@ public class FridgeActivity extends Activity implements View.OnClickListener {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         db.child("FRIDGE").addChildEventListener(new OnFoodListener());
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String key = foodList.get(i);
+                foodList.remove(i);
+                db.child("FRIDGE").child(key).setValue(null);
+            }
+        });
     }
 
 
@@ -66,7 +76,7 @@ public class FridgeActivity extends Activity implements View.OnClickListener {
 
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            String retrievedFood = dataSnapshot.getValue(String.class);
+            String retrievedFood = dataSnapshot.getKey().toString();
             foodList.add(retrievedFood);
             Collections.sort(foodList, String.CASE_INSENSITIVE_ORDER);
             arrAdapter.notifyDataSetChanged();
@@ -80,7 +90,8 @@ public class FridgeActivity extends Activity implements View.OnClickListener {
 
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+            arrAdapter.notifyDataSetChanged();
+            listView.setSelection(arrAdapter.getCount() - 1);
         }
 
         @Override
@@ -112,7 +123,7 @@ public class FridgeActivity extends Activity implements View.OnClickListener {
     {
 
         String food = addEt.getText().toString();
-        db.child("FRIDGE").push().setValue(food);
+        db.child("FRIDGE").child(food).setValue(true);
         addEt.setText("");
         hideKeyboard(this);
     }

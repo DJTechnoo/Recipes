@@ -50,16 +50,22 @@ public class ShopActivity extends Activity implements View.OnClickListener {
         addBut.setOnClickListener(this);
         back = findViewById(R.id.fromshop);
         back.setOnClickListener(this);
-
+        db = FirebaseDatabase.getInstance().getReference();
         arrAdapter = new ArrayAdapter<String>(this, R.layout.item_color, R.id.list_content, shopList);
         shopListView.setAdapter(arrAdapter);
+
+
+
         shopListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 /* TO DO */
+                String key = shopList.get(i);
+                shopList.remove(i);
+                db.child("SHOP").child(key).setValue(null);
             }
         });
-        db = FirebaseDatabase.getInstance().getReference();
+
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
@@ -85,7 +91,7 @@ public class ShopActivity extends Activity implements View.OnClickListener {
 
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            String retrievedItem = dataSnapshot.getValue(String.class);
+            String retrievedItem = dataSnapshot.getKey().toString();
             shopList.add(retrievedItem);
             Collections.sort(shopList, String.CASE_INSENSITIVE_ORDER);
             arrAdapter.notifyDataSetChanged();
@@ -99,7 +105,8 @@ public class ShopActivity extends Activity implements View.OnClickListener {
 
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+            arrAdapter.notifyDataSetChanged();
+            shopListView.setSelection(arrAdapter.getCount() - 1);
         }
 
         @Override
@@ -117,7 +124,7 @@ public class ShopActivity extends Activity implements View.OnClickListener {
     {
 
         String food = addEt.getText().toString();
-        db.child("SHOP").push().setValue(food);
+        db.child("SHOP").child(food).setValue(true);
         addEt.setText("");
         hideKeyboard(this);
     }
