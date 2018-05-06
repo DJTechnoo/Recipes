@@ -60,6 +60,19 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
         objList = new ArrayList<>();
         arrAdapter = new ArrayAdapter<String>(this, R.layout.item_color, R.id.list_content, recipeList);
         listView.setAdapter(arrAdapter);
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String key;
+                key = recipeList.get(i);
+                db.child("RECIPES").child(key).setValue(null);
+                objList.remove(i);
+                return true;
+            }
+        });
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -71,6 +84,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
                 startActivity(intent);
             }
         });
+
 
         but_add.setOnClickListener(this);
         back.setOnClickListener(this);
@@ -167,6 +181,12 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
 
         @Override
         public void onChildRemoved(DataSnapshot dataSnapshot) {
+            String key = dataSnapshot.getKey();
+            //recipeList.add(key);
+            recipeList.remove(key);
+            arrAdapter.notifyDataSetChanged();
+            listView.setSelection(arrAdapter.getCount()-1);
+
 
         }
 
