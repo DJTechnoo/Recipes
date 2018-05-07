@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Recipes</string>
+    <string name="ENTER_REC">Enter recipe name</string>
+    <string name="ADD">ADD</string>
+    <string name="TO_MENU">TO MENU</string>
+    <string name="ERR_NO_REC">Error: No Recipe selected</string>
+    <string name="ADD_ITEM">Add new item</string>
+    <string name="TO_FRIDGE">TO FRIDGE</string>
+    <string name="TO_SHOP">TO SHOPPING LIST</string>
+    <string name="TO_RECIPE">TO RECIPES</string>
 </resources>

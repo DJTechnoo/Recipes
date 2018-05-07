@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.askel.recipes.RecipeItemsActivity"
-    android:background="#000"
-    >
+    android:background="#000">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/recipeitems_tv"
         android:textColor="#42f4eb"
-        android:text="Error: No Recipe selected"
+        android:text="@string/ERR_NO_REC"
         />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/recipeitems_et"
-        android:hint="Add new item"
+        android:hint="@string/ADD_ITEM"
         android:textColorHint="#42f4eb"
         android:textColor="#42f4eb"
         android:layout_below="@id/recipeitems_tv"
@@ -29,21 +27,20 @@
         android:layout_height="wrap_content"
         android:id="@+id/recipeitems_but"
         android:layout_below="@id/recipeitems_et"
-        android:text="ADD"
+        android:text="@string/ADD"
         />
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/recipeitems_lv"
-        android:layout_below="@id/recipeitems_but"
-        ></ListView>
+        android:layout_below="@id/recipeitems_but" />
 
     <LinearLayout
         android:id="@+id/buttons_linear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@id/recipeitems_lv"
-        ></LinearLayout>
+        android:layout_below="@id/recipeitems_lv" />
 
 </RelativeLayout>
