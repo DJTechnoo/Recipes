@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -58,7 +56,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
         ownedItems = new ArrayList<>();
         recipeList = new ArrayList<>();
         objList = new ArrayList<>();
-        arrAdapter = new ArrayAdapter<String>(this, R.layout.item_color, R.id.list_content, recipeList);
+        arrAdapter = new ArrayAdapter<>(this, R.layout.item_color, R.id.list_content, recipeList);
         listView.setAdapter(arrAdapter);
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -98,7 +96,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
 
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            String fridgeItem = dataSnapshot.getKey().toString();
+            String fridgeItem = dataSnapshot.getKey();
             ownedItems.add(fridgeItem);
         }
 
@@ -132,11 +130,12 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
 
 
             // Loop through each "RECIPE" Obj to add it to the obj-list
-            Log.v("TAG1", dataSnapshot.getKey().toString());
+            Log.v("TAG1", dataSnapshot.getKey());
             Recipe tmp = new Recipe(key);
             for(DataSnapshot ds2 : dataSnapshot.getChildren()){
-                Log.v("Tag2", ds2.getValue().toString());
-                tmp.appendList(ds2.getValue().toString());
+                if(ds2 != null) {
+                    tmp.appendList(ds2.getValue().toString());
+                }
             }
 
             recipeList.clear();
@@ -145,7 +144,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
             /* ALGORITHM COMES HERE FOR SORTING BY OWNED ITEMS!
              1) update "priority"
              2) sort by "priority"
-             3) place the keys back into listview in that order
+             3) place the keys back into listView in that order
             * */
             // 1)
             for(Recipe r : objList){
@@ -215,7 +214,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public void addRecipe()
+    private void addRecipe()
     {
         String recipeKey = et.getText().toString();
         if(!recipeKey.equals(""))
@@ -228,6 +227,7 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
         View view = activity.findViewById(android.R.id.content);
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert imm != null;
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
