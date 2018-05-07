@@ -35,3 +35,49 @@ however, since I used a listview I simple added buttons below to indicate items 
 
 Furthermore the shopping list should make use of a swipe-to-delete function.
 I used a press-to-delete instead.
+
+## Testing
+
+The testing has been done after each iteration.
+I created some simulation data in the FireBase database.
+I tested different scenarios with the core features.
+The testing for robustnes has admittingly and regrettable 
+been reduced at this point.
+
+## Linter warnings
+
+Regrettable
+
+Method invocation 'hideSoftInputFromWindow' may produce 'java.lang.NullPointerException'
+This is simply to hide the keyboard if it should automatically pop up on new Activity.
+
+All typos will remain as they are.
+
+```
+Not targeting the latest versions of Android; compatibility <br/>
+modes apply. Consider testing and updating this version. <br/>
+Consult the android.os.Build.VERSION_CODES javadoc for details.
+```
+and 
+```
+A newer version of com.google.firebase:firebase-database than 11.0.4 is available: 15.0.0
+```
+Are hard to fix, since there is a kind of bug that doesn't let me open my project without getting warnings.
+
+```
+On SDK version 23 and up, your app data will be automatically backed up, and restored on app install.
+```
+Prompts me to create a new Activity for Google Search. 
+This won't be necessary as it won't be released in stores.
+
+```
+This folder configuration ('v24') is unnecessary; 'minSdkVersion' is 25. 
+Merge all the resources in this folder into 'drawable'.
+```
+The fix to this warning caused major problems, so the folder is necessary.
+
+```
+All other lin correctedness warnings
+```
+I'm using older versions because the newer versions give the classic "version conflict" -bug,
+which I suspect is coming from my IDE. The problem lies on my side.
