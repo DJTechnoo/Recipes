@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -27,7 +26,6 @@ import java.util.Collections;
 
 public class FridgeActivity extends Activity implements View.OnClickListener {
 
-    private Button back, addBut;
     private EditText addEt;
     private ListView listView;
     private DatabaseReference db;
@@ -45,15 +43,15 @@ public class FridgeActivity extends Activity implements View.OnClickListener {
 
         addEt = findViewById(R.id.addfood_et);
         listView = findViewById(R.id.foodlist);
-        addBut = findViewById(R.id.addfood_but);
+        Button addBut = findViewById(R.id.addfood_but);
         addBut.setOnClickListener(this);
-        back = findViewById(R.id.fromfridge);
+        Button back = findViewById(R.id.fromfridge);
         back.setOnClickListener(this);
 
         db = FirebaseDatabase.getInstance().getReference();
 
         foodList = new ArrayList<>();
-        arrAdapter = new ArrayAdapter<String>(this, R.layout.item_color, R.id.list_content, foodList);
+        arrAdapter = new ArrayAdapter<>(this, R.layout.item_color, R.id.list_content, foodList);
         listView.setAdapter(arrAdapter);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -76,7 +74,7 @@ public class FridgeActivity extends Activity implements View.OnClickListener {
 
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            String retrievedFood = dataSnapshot.getKey().toString();
+            String retrievedFood = dataSnapshot.getKey();
             foodList.add(retrievedFood);
             Collections.sort(foodList, String.CASE_INSENSITIVE_ORDER);
             arrAdapter.notifyDataSetChanged();
@@ -119,7 +117,7 @@ public class FridgeActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public void addFood()
+    private void addFood()
     {
 
         String food = addEt.getText().toString();
@@ -132,6 +130,7 @@ public class FridgeActivity extends Activity implements View.OnClickListener {
         View view = activity.findViewById(android.R.id.content);
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert imm != null;
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }

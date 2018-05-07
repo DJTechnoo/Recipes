@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/recipekey_but"
         android:text="@string/ADD"
-        android:layout_toRightOf="@id/recipekey_et"
+        android:layout_toEndOf="@id/recipekey_et"
         />
 
     <Button

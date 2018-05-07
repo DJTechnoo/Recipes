@@ -8,4 +8,5 @@
     <string name="TO_FRIDGE">TO FRIDGE</string>
     <string name="TO_SHOP">TO SHOPPING LIST</string>
     <string name="TO_RECIPE">TO RECIPES</string>
+    <string name="ADD_ITEM_FOR">Add items for</string>
 </resources>

@@ -19,7 +19,7 @@
         <activity android:name=".FridgeActivity" />
         <activity android:name=".ShopActivity" />
         <activity android:name=".RecipeActivity" />
-        <activity android:name=".RecipeItemsActivity"></activity>
+        <activity android:name=".RecipeItemsActivity" />
     </application>
 
 </manifest>

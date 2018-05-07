@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @since 05/05/2018
  */
 
-public class Recipe {
+class Recipe {
     public final String key;
     public int priority;
     public final ArrayList<String> itemList;

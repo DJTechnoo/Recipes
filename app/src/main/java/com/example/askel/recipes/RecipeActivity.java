@@ -29,7 +29,6 @@ import java.util.Comparator;
 public class RecipeActivity extends Activity implements View.OnClickListener {
 
     private EditText et;
-    private Button but_add, back;
     private DatabaseReference db;
     private ArrayList<String> recipeList;
     private ArrayAdapter<String> arrAdapter;
@@ -48,8 +47,8 @@ public class RecipeActivity extends Activity implements View.OnClickListener {
 
         db = FirebaseDatabase.getInstance().getReference();
         et = findViewById(R.id.recipekey_et);
-        but_add = findViewById(R.id.recipekey_but);
-        back = findViewById(R.id.fromrecipe_but);
+        Button but_add = findViewById(R.id.recipekey_but);
+        Button back = findViewById(R.id.fromrecipe_but);
         listView = findViewById(R.id.recipe_lv);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 

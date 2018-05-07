@@ -60,7 +60,7 @@ public class RecipeItemsActivity extends Activity implements View.OnClickListene
 
         Intent intent = getIntent();
         key = intent.getStringExtra("KEY");
-        tv.setText("Add items for " + key);
+        tv.setText(getString(R.string.ADD_ITEM_FOR) + key);
         but.setOnClickListener(this);
 
         db2.child("FRIDGE").addChildEventListener(new OnFridgeListener());
