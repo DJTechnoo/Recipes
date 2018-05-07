@@ -63,6 +63,7 @@ public class ShopActivity extends Activity implements View.OnClickListener {
                 String key = shopList.get(i);
                 shopList.remove(i);
                 db.child("SHOP").child(key).setValue(null);
+                db.child("FRIDGE").child(key).setValue(true);
             }
         });
 

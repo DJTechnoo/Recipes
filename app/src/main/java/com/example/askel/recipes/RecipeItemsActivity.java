@@ -34,6 +34,7 @@ public class RecipeItemsActivity extends Activity implements View.OnClickListene
     private TextView tv;
     private DatabaseReference db, db2;
 
+    private ArrayList<String> buttonKeys;
     private ArrayList<String> itemList;
     private ArrayList<String> fridgeList;
     private ArrayAdapter<String> arrAdapter;
@@ -56,6 +57,7 @@ public class RecipeItemsActivity extends Activity implements View.OnClickListene
         listView = findViewById(R.id.recipeitems_lv);
         itemList = new ArrayList<>();
         fridgeList = new ArrayList<>();
+        buttonKeys = new ArrayList<>();
         arrAdapter = new ArrayAdapter<String>(this, R.layout.item_color, R.id.list_content, itemList);
         listView.setAdapter(arrAdapter);
 
@@ -168,10 +170,21 @@ public class RecipeItemsActivity extends Activity implements View.OnClickListene
     private void createButton(String b_id, int idx){
         LinearLayout layout = findViewById(R.id.buttons_linear);
 
+        buttonKeys.add(b_id);
         //set the properties for button
         Button btnTag = new Button(this);
         btnTag.setText(b_id);
         btnTag.setId(idx);
+        btnTag.setOnClickListener(new View.OnClickListener()
+                                  {
+                                      @Override
+                                      public void onClick(View v) {
+                                          int i = v.getId();
+                                          String button_key = buttonKeys.get(i);
+                                          DatabaseReference tDb = FirebaseDatabase.getInstance().getReference();
+                                          tDb.child("SHOP").child(button_key).setValue(true);
+                                      }
+                                  });
 
         //add button to the layout
         layout.addView(btnTag);
