@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -27,7 +26,7 @@ import java.util.Collections;
 
 public class ShopActivity extends Activity implements View.OnClickListener {
 
-    private Button back, addBut;
+   // private Button back, addBut;
     private EditText addEt;
     private ListView shopListView;
     private ArrayAdapter<String> arrAdapter;
@@ -42,6 +41,7 @@ public class ShopActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_shop);
         getWindow().getDecorView().setBackgroundColor(Color.BLACK);
 
+        Button back, addBut;
 
         shopListView = findViewById(R.id.shoplist);
         shopList = new ArrayList<>();
@@ -51,7 +51,7 @@ public class ShopActivity extends Activity implements View.OnClickListener {
         back = findViewById(R.id.fromshop);
         back.setOnClickListener(this);
         db = FirebaseDatabase.getInstance().getReference();
-        arrAdapter = new ArrayAdapter<String>(this, R.layout.item_color, R.id.list_content, shopList);
+        arrAdapter = new ArrayAdapter<>(this, R.layout.item_color, R.id.list_content, shopList);
         shopListView.setAdapter(arrAdapter);
 
 
@@ -92,7 +92,7 @@ public class ShopActivity extends Activity implements View.OnClickListener {
 
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            String retrievedItem = dataSnapshot.getKey().toString();
+            String retrievedItem = dataSnapshot.getKey();
             shopList.add(retrievedItem);
             Collections.sort(shopList, String.CASE_INSENSITIVE_ORDER);
             arrAdapter.notifyDataSetChanged();
@@ -121,7 +121,7 @@ public class ShopActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public void addFood()
+    private void addFood()
     {
 
         String food = addEt.getText().toString();
@@ -134,6 +134,7 @@ public class ShopActivity extends Activity implements View.OnClickListener {
         View view = activity.findViewById(android.R.id.content);
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            //noinspection ConstantConditions
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
