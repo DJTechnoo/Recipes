@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -29,16 +28,13 @@ public class RecipeItemsActivity extends Activity implements View.OnClickListene
 
     private String key;
 
-    private Button but;
     private EditText et;
-    private TextView tv;
-    private DatabaseReference db, db2;
+    private DatabaseReference db;
 
     private ArrayList<String> buttonKeys;
     private ArrayList<String> itemList;
     private ArrayList<String> fridgeList;
     private ArrayAdapter<String> arrAdapter;
-    private ListView listView;
     private int b_id;
 
     @Override
@@ -50,15 +46,16 @@ public class RecipeItemsActivity extends Activity implements View.OnClickListene
         getWindow().getDecorView().setBackgroundColor(Color.BLACK);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         b_id = 0;
+        DatabaseReference db2;
         db = db2 = FirebaseDatabase.getInstance().getReference();
-        tv = findViewById(R.id.recipeitems_tv);
+        TextView tv = findViewById(R.id.recipeitems_tv);
         et = findViewById(R.id.recipeitems_et);
-        but = findViewById(R.id.recipeitems_but);
-        listView = findViewById(R.id.recipeitems_lv);
+        Button but = findViewById(R.id.recipeitems_but);
+        ListView listView = findViewById(R.id.recipeitems_lv);
         itemList = new ArrayList<>();
         fridgeList = new ArrayList<>();
         buttonKeys = new ArrayList<>();
-        arrAdapter = new ArrayAdapter<String>(this, R.layout.item_color, R.id.list_content, itemList);
+        arrAdapter = new ArrayAdapter<>(this, R.layout.item_color, R.id.list_content, itemList);
         listView.setAdapter(arrAdapter);
 
         Intent intent = getIntent();
@@ -72,11 +69,14 @@ public class RecipeItemsActivity extends Activity implements View.OnClickListene
 
     }
 
+    /**
+     * This class simply collects data from the fridge.
+     */
     private class OnFridgeListener implements ChildEventListener{
 
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            String fKey = dataSnapshot.getKey().toString();
+            String fKey = dataSnapshot.getKey();
             fridgeList.add(fKey);
         }
 
@@ -101,25 +101,33 @@ public class RecipeItemsActivity extends Activity implements View.OnClickListene
         }
     }
 
+    /**
+     * This class Implements ChildEventListener
+     * It is used to listen to data being added and removed.
+     * It also checks if button needs to be made, when the
+     * item in the recipe doesn't exist in the fridge
+     */
     private class OnItemListener implements ChildEventListener{
 
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            String item = dataSnapshot.getValue().toString();
-            itemList.add(item);
-            arrAdapter.notifyDataSetChanged();
+            if(dataSnapshot != null) {
+                String item = dataSnapshot.getValue().toString();
+                itemList.add(item);
+                arrAdapter.notifyDataSetChanged();
 
-            boolean found = false;
-            for(String tmp : fridgeList){
+                boolean found = false;
+                for (String tmp : fridgeList) {
 
-                if(item.equals(tmp)){
-                    found = true;
+                    if (item.equals(tmp)) {
+                        found = true;
+                    }
+
                 }
-
-            }
-            if(!found) {
-                createButton(item, b_id);
-                b_id++;
+                if (!found) {
+                    createButton(item, b_id);
+                    b_id++;
+                }
             }
         }
 
@@ -153,16 +161,21 @@ public class RecipeItemsActivity extends Activity implements View.OnClickListene
         }
     }
 
-    public void addItem() {
+    /**
+     * This Method adds an item to the RECIPE in FireBase
+     */
+    private void addItem() {
         String item = et.getText().toString();
         et.setText("");
         db.child("RECIPES").child(key).push().setValue(item);
+        hideKeyboard(this);
     }
 
     private static void hideKeyboard(Activity activity) {
         View view = activity.findViewById(android.R.id.content);
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            assert imm != null;
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
