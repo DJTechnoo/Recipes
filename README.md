@@ -4,6 +4,9 @@ make recipes, add items they own to the "fridge" and items
 they need to purchase to their "shopping list". This aplication
 also sorts the recipe list according to the number of items
 in the recipe that match with the items in your "shopping list".
+### Project Author
+I believe the original idea is Halvor Bakken Smedås'
+
 ## Project Recipe Assistant
 ### How to run
 To run the latest version of this aplication, simply follow
