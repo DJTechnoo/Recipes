@@ -1,10 +1,8 @@
 package com.example.askel.recipes;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -12,8 +10,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 public class MainActivity extends Activity implements View.OnClickListener {
-
-    private Button fridgeBut, shopBut, recipeBut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +19,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         getWindow().getDecorView().setBackgroundColor(Color.BLACK);
 
-        fridgeBut = findViewById(R.id.fridgebut);
-        shopBut = findViewById(R.id.shopbut);
-        recipeBut = findViewById(R.id.recipebut);
+        Button fridgeBut = findViewById(R.id.fridgebut);
+        Button shopBut = findViewById(R.id.shopbut);
+        Button recipeBut = findViewById(R.id.recipebut);
         fridgeBut.setOnClickListener(this);
         shopBut.setOnClickListener(this);
         recipeBut.setOnClickListener(this);
